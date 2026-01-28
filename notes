@@ -1,0 +1,75 @@
+Nav2 Planner & Controller Comparison Results
+============================================
+
+Test Configuration:
+- Start Position: [-2.71, -2.95, theta]
+- Goal Position: [4.20, 2.28, theta]
+- Date/Time: 2026-01-28 14:35
+
+Standard Navigation Challenge Results:
+--------------------------------------
+
+Test 1: NavFn + DWB (Baseline)
+- Navigation Time: 43.64 seconds
+- Path Length: 10.53 metres (measured using RViz Measure tool in segments)
+- Success: Yes
+- Number of Visible Replans: _____
+- Path Characteristics:
+  * Smoothness (1-5): 4
+  * Wall clearance (close/medium/far): Medium
+  * Corner behaviour: Giving space to corner
+- Observations: During the end slightly moved took direction towards the wall
+
+Test 2: Theta Star + DWB
+- Navigation Time: 45.41 seconds
+- Path Length: 10.56 metres (measured using RViz Measure tool in segments)
+- Success: Yes
+- Number of Visible Replans: _____
+- Path Characteristics:
+  * Smoothness (1-5): 4
+  * Wall clearance (close/medium/far): Far
+  * Corner behaviour: Wide turn
+- Observations: Feels more smoother and less changes compared to the previous method
+
+Test 3: Smac 2D + DWB
+- Navigation Time: 45.60 seconds
+- Path Length: 13.44 metres (measured using RViz Measure tool in segments)
+- Success: Yes/No
+- Number of Visible Replans: 5
+- Path Characteristics:
+  * Smoothness (1-5): 3
+  * Wall clearance (close/medium/far): Close
+  * Corner behaviour: Path avoids corner at first, but later takes a sharp turn
+- Observations:
+
+Test 4: NavFn + Regulated Pure Pursuit
+- Navigation Time: _____ seconds
+- Path Length: _____ metres (measured using RViz Measure tool in segments)
+- Success: Yes/No
+- Number of Visible Replans: _____
+- Path Characteristics:
+  * Smoothness (1-5): _____
+  * Wall clearance (close/medium/far): _____
+  * Corner behaviour: _____
+- Observations:
+  [free text]
+
+Test 5: DWB + NavFn (Verification)
+- Navigation Time: _____ seconds
+- Path Length: _____ metres (measured using RViz Measure tool in segments)
+- Success: Yes/No
+- Number of Visible Replans: _____
+- Path Characteristics:
+  * Smoothness (1-5): _____
+  * Wall clearance (close/medium/far): _____
+  * Corner behaviour: _____
+- Observations:
+  [free text]
+
+Comparative Analysis:
+--------------------
+Best for speed: _____
+Best for smoothness: _____
+Best for tight spaces: _____
+Most predictable: _____
+Trade-offs observed: _____
