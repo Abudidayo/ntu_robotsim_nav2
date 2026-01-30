@@ -1,0 +1,87 @@
+Nav2 Planner & Controller Comparison Results
+============================================
+
+Test Configuration:
+- Start Position: [-2.71, -2.95, theta]
+- Goal Position: [4.20, 2.28, theta]
+- Date/Time: 2026-01-28 14:35
+
+Standard Navigation Challenge Results:
+--------------------------------------
+
+Test 1: NavFn + DWB (Baseline)
+- Navigation Time: 43.64 seconds
+- Path Length: 10.53 metres (measured using RViz Measure tool in segments)
+- Success: Yes
+- Number of Visible Replans: 4
+- Path Characteristics:
+  * Smoothness (1-5): 4
+  * Wall clearance (close/medium/far): Medium
+  * Corner behaviour: Giving space to corner
+- Observations: Minor corrective behaviour was observed near the goal, 
+with the robot briefly steering towards the wall before stabilising.
+
+Test 2: Theta Star + DWB
+- Navigation Time: 45.41 seconds
+- Path Length: 10.56 metres (measured using RViz Measure tool in segments)
+- Success: Yes
+- Number of Visible Replans: 6
+- Path Characteristics:
+  * Smoothness (1-5): 4
+  * Wall clearance (close/medium/far): Far
+  * Corner behaviour: Wide turn
+- Observations: The planned path appeared smoother than NavFn, with fewer abrupt direction
+ changes, although this resulted in a slightly wider trajectory and increased replanning.
+
+Test 3: Smac 2D + DWB
+- Navigation Time: 45.60 seconds
+- Path Length: 13.44 metres (measured using RViz Measure tool in segments)
+- Success: Yes
+- Number of Visible Replans: 5
+- Path Characteristics:
+  * Smoothness (1-5): 3
+  * Wall clearance (close/medium/far): Close
+  * Corner behaviour: Path avoids corner at first, but later takes a sharp turn
+- Observations: The planner produced a longer and more conservative path. While initial
+corner avoidance was effective, the robot later executed sharper turns, 
+reducing overall smoothness.
+
+Test 4: NavFn + Regulated Pure Pursuit
+- Navigation Time: 44.19 seconds
+- Path Length: 10.26 metres (measured using RViz Measure tool in segments)
+- Success: Yes
+- Number of Visible Replans: 4
+- Path Characteristics:
+  * Smoothness (1-5): 5
+  * Wall clearance (close/medium/far): Medium
+  * Corner behaviour: Curved around the corner
+- Observations: The controller followed the planned path smoothly with continuous 
+curvature, reducing abrupt velocity changes and improving 
+overall motion stability.
+
+Test 5: DWB + NavFn (Verification)
+- Navigation Time: 44.57 seconds
+- Path Length: 10.44 metres (measured using RViz Measure tool in segments)
+- Success: Yes
+- Number of Visible Replans: 2
+- Path Characteristics:
+  * Smoothness (1-5): 4
+  * Wall clearance (close/medium/far): Medium
+  * Corner behaviour: Giving space to the corners
+- Observations: Results closely matched the baseline test, confirming
+consistency in the experimental setup and validating the repeatability 
+of the measurements.
+
+Comparative Analysis:
+--------------------
+Best for speed: NavFn + DWB  
+Best for smoothness: NavFn + Regulated Pure Pursuit  
+Best for tight spaces: NavFn + DWB  
+Most predictable: NavFn + Regulated Pure Pursuit  
+
+Trade-offs observed: NavFn produced shorter and faster paths but showed sharper 
+corner behaviour with DWB. Theta Star had smoother and wider paths, 
+resulting in increased replanning and slightly longer navigation times. 
+Smac 2D prioritised safe paths, leading
+to significantly longer distances. Regulated Pure Pursuit improved smoothness 
+and predictability when following NavFn paths but less responsive compared to DWB.
