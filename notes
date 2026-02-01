@@ -17,7 +17,6 @@ Test 1: NavFn + DWB (Baseline)
 - Path Characteristics:
   * Smoothness (1-5): 4
   * Wall clearance (close/medium/far): Medium
-  * Corner behaviour: Giving space to corner
 - Observations: Minor corrective behaviour was observed near the goal, 
 with the robot briefly steering towards the wall before stabilising.
 
@@ -29,7 +28,6 @@ Test 2: Theta Star + DWB
 - Path Characteristics:
   * Smoothness (1-5): 4
   * Wall clearance (close/medium/far): Far
-  * Corner behaviour: Wide turn
 - Observations: The planned path appeared smoother than NavFn, with fewer abrupt direction
  changes, although this resulted in a slightly wider trajectory and increased replanning.
 
@@ -41,7 +39,6 @@ Test 3: Smac 2D + DWB
 - Path Characteristics:
   * Smoothness (1-5): 3
   * Wall clearance (close/medium/far): Close
-  * Corner behaviour: Path avoids corner at first, but later takes a sharp turn
 - Observations: The planner produced a longer and more conservative path. While initial
 corner avoidance was effective, the robot later executed sharper turns, 
 reducing overall smoothness.
@@ -85,3 +82,136 @@ resulting in increased replanning and slightly longer navigation times.
 Smac 2D prioritised safe paths, leading
 to significantly longer distances. Regulated Pure Pursuit improved smoothness 
 and predictability when following NavFn paths but less responsive compared to DWB.
+
+============================================================
+Challenge A — Velocity Configuration
+============================================================
+
+Run 1 — Low Velocity
+--------------------
+Navigation Time: 1 min 21 seconds
+Path Length: 11.3 metres
+Success: Yes
+Visible Replans: 9
+Smoothness (1–5): 3
+Wall Clearance (close / medium / far): Medium
+Corner Behaviour: Going around the corner
+Observations:
+
+Run 2 — Medium Velocity
+-----------------------
+Navigation Time: 44 seconds
+Path Length: 10.3 metres
+Success: Yes
+Visible Replans: 6
+Smoothness (1–5): 4
+Wall Clearance (close / medium / far): Medium
+Corner Behaviour: Medium going around corner
+Observations:
+___________________________________________________________
+
+Run 3 — High Velocity
+---------------------
+Navigation Time: 45 seconds
+Path Length: 10.64 metres
+Success: Yes
+Visible Replans: 3
+Smoothness (1–5): 2
+Wall Clearance (close / medium / far): Close
+Corner Behaviour: Steep turn
+Observations:
+
+============================================================
+Challenge B — Recovery Behaviour
+============================================================
+
+Failure Scenario Triggered:
+(e.g. tight corner / blocked path / obstacle insertion)
+___________________________________________________________
+
+Recovery Behaviours Observed:
+- Spin recovery: Yes / No
+- Backup recovery: Yes / No
+- Costmap clearing: Yes / No
+
+Recovery Outcome:
+- Navigation resumed successfully: Yes / No
+- Time to recover (approx): _____ seconds
+
+Observations:
+___________________________________________________________
+
+Key Finding:
+___________________________________________________________
+
+============================================================
+Challenge C — AMCL Parameter Tuning (Results Summary)
+============================================================
+
+Run | min/max particles | update_min_d/a | Convergence (s) | Success | Notes
+----+-------------------+----------------+-----------------+----------------+----------------------------
+1   | 200 / 500         | 0.10 / 0.10    | 8.66            |    Y    | Particles condense shortly after starting. Route stays consistent throughout the course.
+2   | 200 / 500         | 0.50 / 0.50    | N/A             |    Y    | Upon updating to a higher update threshhold, the particles kept getting bigger and bigger in the end.
+3   | 500 / 2000        | 0.10 / 0.10    | 13              |    Y    | Particles take longer and are a lot more condensed in the end. Route stays consistent throughout the course.
+4   | 500 / 2000        | 0.50 / 0.50    | N/A             |    Y    | Upon updating to a higher update threshhold, the particles kept getting bigger and bigger in the end.
+5   | 2000 / 5000       | 0.10 / 0.10    | 14.23           |    Y    | Particles take longer, but not as condensed in the end. Route stays consistent throughout the end.
+6   | 2000 / 5000       | 0.50 / 0.50    | N/A             |    Y    | Upon updating to a higher update threshhold, the particles kept getting bigger and bigger in the end.
+
+============================================================
+Challenge D — Costmap Exploration (Results Summary)
+============================================================
+
+Run | inflation_radius | cost_scaling | Wall proximity | Tight space behaviour | Path detour | Success | Notes
+----+------------------+--------------+----------------+-----------------------+-------------+---------+-----------------------------------------------
+1   | 0.30             | 3.0          | Very close     | Navigates through     | Direct      |   Y     | Robot drives very close to walls.
+2   | 0.55 (base)      | 3.0          | Safe           | Navigates through     | Moderate    |   Y     | Balanced clearance and smooth navigation.
+3   | 0.80             | 3.0          | Very safe      | Hesitates             | Significant |   Y     | Large clearance, avoids walls and takes longer paths.
+
+
+Costmap Visualisation Observations
+----------------------------------
+- Small inflation (0.30): Narrow inflated regions with sharp cost gradients close to obstacles.
+- Baseline inflation (0.55): Clearly defined obstacle borders with smooth gradient transitions.
+- Large inflation (0.80): Wide inflated regions significantly reducing free space.
+
+============================================================
+Challenge E — Waypoint Mission
+============================================================
+
+Waypoints (map frame)
+S  : (-2.8, -3.2)
+W1 : ( 4.0,  3.0)
+W2 : ( 3.7, -3.5)
+W3 : ( 3.5,  0.0)
+W4 : ( 0.6, -3.5)
+
+Run | xy/yaw tol | W1 (s) | W2 (s) | W3 (s) | W4 (s) | Total (s) | Reached | Notes
+----+------------+--------+--------+--------+--------+-----------+---------+-------------------------
+1   | 0.10       | N/A    | N/A    | N/A    | N/A    | N/A       | 0/4     | Got stuck when getting close to the first market point.
+2   | 0.25       | 45.0   | 55.0   | 64.3   | 52.9   | 221.2     | 4/4     | Goal zone is smaller leading to a longer travel distance.
+3   | 0.50       | 42.4   | 52.5   | 63.3   | 52.0   | 214.2     | 4/4     | Goal zone is larger leading to a shorter travel distance.
+
+
+============================================================
+Challenge F — Static Obstacle Addition
+============================================================
+
+Obstacle Description:
+(type, size, position)
+___________________________________________________________
+
+Obstacle Added At:
+(time / robot position)
+___________________________________________________________
+
+Results After Obstacle Insertion:
+- Global replanning observed: Yes / No
+- Number of replans increased: Yes / No
+- Collision avoided: Yes / No
+- Navigation success: Yes / No
+
+Observations:
+___________________________________________________________
+
+Key Finding:
+___________________________________________________________
