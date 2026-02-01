@@ -1,0 +1,11 @@
+source ~/ros2_ws/install/setup.bash
+colcon build --packages-select ntu_robotsim
+ros2 launch ntu_robotsim navigation.launch.py
+
+colcon build --symlink-install
+
+# Terminal 1: Launch navigation
+ros2 launch ntu_robotsim navigation.launch.py
+
+# Terminal 2: Set initial pose in RViz, then run the waypoint mission
+ros2 run ntu_robotsim waypoint_mission.py
