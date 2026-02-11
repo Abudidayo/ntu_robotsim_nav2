@@ -125,24 +125,22 @@ Observations:
 Challenge B — Recovery Behaviour
 ============================================================
 
-Failure Scenario Triggered:
-(e.g. tight corner / blocked path / obstacle insertion)
-___________________________________________________________
+Test | Initial Error           | Particle Behaviour                         | Result
+-----+-------------------------+--------------------------------------------+--------
+1    | ~1 m offset             | Spread initially, then tightened            | Success
+2    | ~2.5 m + 90–180° offset | Divergence, no stable convergence           | Failed
+3    | Kidnapped mid-run       | Full spread, partial convergence observed   | Failed
 
-Recovery Behaviours Observed:
-- Spin recovery: Yes / No
-- Backup recovery: Yes / No
-- Costmap clearing: Yes / No
-
-Recovery Outcome:
-- Navigation resumed successfully: Yes / No
-- Time to recover (approx): _____ seconds
-
-Observations:
-___________________________________________________________
+Key Observation:
+Small initial pose errors are recoverable by AMCL, with particle clouds
+successfully converging after brief spreading. Large positional and
+rotational errors, as well as mid-navigation kidnapping, lead to particle
+divergence or unstable localisation, preventing reliable navigation.
 
 Key Finding:
-___________________________________________________________
+AMCL recovery is effective for minor localisation errors but fails under
+large pose discrepancies or sudden relocation, highlighting the importance
+of accurate initialisation and distinctive environmental features.
 
 ============================================================
 Challenge C — AMCL Parameter Tuning (Results Summary)
@@ -196,22 +194,8 @@ Run | xy/yaw tol | W1 (s) | W2 (s) | W3 (s) | W4 (s) | Total (s) | Reached | Not
 Challenge F — Static Obstacle Addition
 ============================================================
 
-Obstacle Description:
-(type, size, position)
-___________________________________________________________
-
-Obstacle Added At:
-(time / robot position)
-___________________________________________________________
-
-Results After Obstacle Insertion:
-- Global replanning observed: Yes / No
-- Number of replans increased: Yes / No
-- Collision avoided: Yes / No
-- Navigation success: Yes / No
-
-Observations:
-___________________________________________________________
-
-Key Finding:
+Test | Scenario           | Time (s) | Result
+-----+--------------------+----------+---------
+1    | Without obstacles  | 46.15    | Success
+2    | With obstacles     | 39.12    | Success
 ___________________________________________________________
